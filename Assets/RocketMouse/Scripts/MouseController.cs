@@ -31,6 +31,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.UI;
+
+
 
 public class MouseController : MonoBehaviour 
 {
@@ -44,6 +47,9 @@ public class MouseController : MonoBehaviour
     public AudioSource jetpackAudio;
     public AudioSource footstepsAudio;
     public ParallaxScroll parallax;
+    public Text coinsLabel;
+    public GameObject restartDialog;
+
 
     private Animator animator;
     private bool grounded;
@@ -52,6 +58,7 @@ public class MouseController : MonoBehaviour
 
     void Start () 
     {
+        restartDialog.SetActive(false);
         animator = GetComponent<Animator>();	
     }
 
@@ -108,6 +115,8 @@ public class MouseController : MonoBehaviour
 	    }
 	    dead = true;
 	    animator.SetBool("dead", true);
+        restartDialog.SetActive(true);
+
     }
 
     void CollectCoin(Collider2D coinCollider) 
@@ -115,45 +124,27 @@ public class MouseController : MonoBehaviour
         coins++;
         Destroy(coinCollider.gameObject);
         AudioSource.PlayClipAtPoint(coinCollectSound, transform.position);
+        coinsLabel.text = coins.ToString();
+
     }
 
-    void OnGUI() 
-    {
-        DisplayCoinsCount();
-        DisplayRestartButton();
-    }
 
-    void DisplayCoinsCount() 
-    {
-	    Rect coinIconRect = new Rect(10, 10, 32, 32);
-	    GUI.DrawTexture(coinIconRect, coinIconTexture);                         
-		
-	    GUIStyle style = new GUIStyle();
-	    style.fontSize = 30;
-	    style.fontStyle = FontStyle.Bold;
-	    style.normal.textColor = Color.yellow;
 
-	    Rect labelRect = new Rect(coinIconRect.xMax, coinIconRect.y, 60, 32);
-	    GUI.Label(labelRect, coins.ToString(), style);
-    }
-
-    void DisplayRestartButton() 
-    {
-        if (dead && grounded) 
-        {
-            Rect buttonRect = new Rect(Screen.width * 0.35f, Screen.height * 0.45f, Screen.width * 0.30f, Screen.height * 0.1f);
-	        if (GUI.Button(buttonRect, "Tap to restart!")) 
-	        {
-	        	
-				SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
-	        }
-	    }
-    }
-
-  void AdjustFootstepsAndJetpackSound(bool jetpackActive) 
+    void AdjustFootstepsAndJetpackSound(bool jetpackActive) 
   {
       footstepsAudio.enabled = !dead && grounded;
       jetpackAudio.enabled =  !dead && !grounded;
 	  jetpackAudio.volume = jetpackActive ? 1.0f : 0.5f;        
   }
+    
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void ExitToMenu()
+    {
+        SceneManager.LoadScene("MenuScene");
+    }
+
 }
