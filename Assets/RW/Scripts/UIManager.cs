@@ -4,10 +4,29 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
+
 {
-public void StartGame()
-{
-    SceneManager.LoadScene("RocketMouse");
-}
+
+    public void StartGame()
+    {
+        SceneManager.LoadScene("RocketMouse");
+    }
+
+    public Animator startButton;
+    public Animator settingsButton;
+    public void OpenSettings()
+    {
+        startButton.SetBool("isHidden", true);
+        settingsButton.SetBool("isHidden", true);
+        dialog.SetBool("isHidden", false);
+    }
+    public Animator dialog;
+    
+    public void CloseSettings()
+    {
+        startButton.SetBool("isHidden", false);
+        settingsButton.SetBool("isHidden", false);
+        dialog.SetBool("isHidden", true);
+    }
 
 }
