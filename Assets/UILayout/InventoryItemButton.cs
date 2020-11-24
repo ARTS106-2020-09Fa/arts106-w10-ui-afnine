@@ -7,13 +7,13 @@ public class InventoryItemButton : MonoBehaviour
 {
     private Text buttonText;
     private string[] itemTypes = { "Armor", "Weapon", "Spell" };
-    public int index;
+    public int typeIndex;
 
     private void Awake()
     {
-        index = Random.Range(0, 3);
+        typeIndex = Random.Range(0, 3);
         buttonText = GetComponentInChildren<Text>();
-        buttonText.text = indexTypes[index];
+        buttonText.text = itemTypes[typeIndex];
     }
 
 }
